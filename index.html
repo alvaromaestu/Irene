@@ -20,11 +20,12 @@
       position: absolute;
     }
 
+    /* 💖 CENTRADO EXACTO EN EL CORAZÓN */
     .texto {
       position: absolute;
       width: 100%;
       text-align: center;
-      top: 40%;
+      top: 50%;
       transform: translateY(-50%);
       opacity: 0;
       transition: 3s;
@@ -38,7 +39,7 @@
     }
 
     p {
-      font-size: 36px;
+      font-size: 34px;
       color: #ffffff;
       text-shadow:
         0 0 5px #000,
@@ -46,6 +47,14 @@
         0 0 30px #ff4da6,
         0 0 60px #ff4da6;
       font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .pregunta {
+      font-size: 32px;
+      margin-top: 10px;
+      color: #ff4da6;
+      text-shadow: 0 0 20px #ff4da6;
     }
 
     button {
@@ -60,7 +69,7 @@
       box-shadow: 0 0 20px #ff4da6;
     }
 
-    /* 🎈 CONTENEDOR GLOBO */
+    /* 🎈 GLOBO */
     .globo-container {
       position: absolute;
       left: 50%;
@@ -72,7 +81,6 @@
       z-index: 9;
     }
 
-    /* 💖 FOTO */
     #foto {
       width: 260px;
       height: 260px;
@@ -81,7 +89,6 @@
       box-shadow: 0 0 60px #ff4da6;
     }
 
-    /* 🧵 CUERDA */
     .cuerda {
       width: 3px;
       height: 120px;
@@ -90,20 +97,11 @@
       box-shadow: 0 0 10px #fff;
     }
 
-    /* 🎬 ANIMACIÓN GLOBO */
     @keyframes subirGlobo {
-      0% {
-        bottom: -400px;
-      }
-      70% {
-        bottom: 80px;
-      }
-      85% {
-        bottom: 60px;
-      }
-      100% {
-        bottom: 70px;
-      }
+      0% { bottom: -400px; }
+      70% { bottom: 80px; }
+      85% { bottom: 60px; }
+      100% { bottom: 70px; }
     }
 
     .animarGlobo {
@@ -119,6 +117,7 @@
 <div class="texto" id="texto">
   <h1 id="nombre"></h1>
   <p>Te amo por y para siempre 💖</p>
+  <p class="pregunta">¿Y tú? 💘</p>
 
   <div>
     <button onclick="aceptar()">Sí 💘</button>
@@ -126,7 +125,6 @@
   </div>
 </div>
 
-<!-- 🎈 GLOBO -->
 <div class="globo-container" id="globo">
   <img id="foto" src="foto.jpg">
   <div class="cuerda"></div>
@@ -231,7 +229,6 @@ function aceptar() {
   }
 
   lanzarCorazones();
-
   document.getElementById("globo").classList.add("animarGlobo");
 }
 
