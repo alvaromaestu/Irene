@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Para Irene 💖</title>
+
+  <!-- Vista previa WhatsApp -->
+  <meta property="og:title" content="Para Irene 💖">
+  <meta property="og:description" content="No abras esto si no eres Irene... 💕">
+  <meta property="og:image" content="https://i.imgur.com/8Km9tLL.png">
+
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle, #000000, #0a0a0a);
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    canvas {
+      position: absolute;
+    }
+
+    .texto {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0;
+      transition: 3s;
+    }
+
+    h1 {
+      font-size: 42px;
+      color: #ff4da6;
+      text-shadow: 0 0 25px #ff4da6, 0 0 50px #ff4da6;
+      min-height: 50px;
+    }
+
+    p {
+      font-size: 22px;
+      text-shadow: 0 0 10px #ff4da6;
+    }
+
+    button {
+      padding: 12px 25px;
+      margin: 15px;
+      border: none;
+      background: #ff4da6;
+      color: white;
+      font-size: 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #ff4da6;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div class="texto" id="texto">
+  <h1 id="nombre"></h1>
+  <p>Te amo por y para siempre 💖</p>
+
+  <div>
+    <button onclick="aceptar()">Sí 💘</button>
+    <button onmouseover="escapar(this)">No 😢</button>
+  </div>
+</div>
+
+<!-- Música romántica libre -->
+<audio autoplay loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6f6c9c8d3b.mp3">
+</audio>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let t = 0;
+
+function heart(t) {
+  return {
+    x: 16 * Math.pow(Math.sin(t), 3),
+    y: -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t))
+  };
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.beginPath();
+
+  for (let i = 0; i < t; i += 0.02) {
+    let pos = heart(i);
+    ctx.lineTo(canvas.width/2 + pos.x * 15, canvas.height/2 + pos.y * 15);
+  }
+
+  ctx.strokeStyle = "#ff4da6";
+  ctx.shadowColor = "#ff4da6";
+  ctx.shadowBlur = 30;
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  t += 0.04;
+
+  if (t < Math.PI * 2) {
+    requestAnimationFrame(draw);
+  } else {
+    mostrarTexto();
+  }
+}
+
+draw();
+
+// ✨ Texto letra por letra
+function escribirTexto(texto, elemento, velocidad = 120) {
+  let i = 0;
+  function escribir() {
+    if (i < texto.length) {
+      elemento.innerHTML += texto.charAt(i);
+      i++;
+      setTimeout(escribir, velocidad);
+    }
+  }
+  escribir();
+}
+
+function mostrarTexto() {
+  document.getElementById("texto").style.opacity = 1;
+  escribirTexto("Para Irene 💖", document.getElementById("nombre"));
+}
+
+// 💓 Vibración + acción botón
+function aceptar() {
+  if (navigator.vibrate) {
+    navigator.vibrate([200, 100, 200]);
+  }
+  alert("Sabía que dirías que sí 😍💖");
+}
+
+// 😂 Botón que huye
+function escapar(btn) {
+  btn.style.position = "absolute";
+  btn.style.top = Math.random() * window.innerHeight + "px";
+  btn.style.left = Math.random() * window.innerWidth + "px";
+}
+</script>
+
+</body>
+</html>
