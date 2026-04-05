@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <title>Para Irene 💖</title>
 
-  <!-- Vista previa WhatsApp -->
   <meta property="og:title" content="Para Irene 💖">
   <meta property="og:description" content="No abras esto si no eres Irene... 💕">
-  <meta property="og:image" content="https://i.imgur.com/8Km9tLL.png">
 
   <style>
     body {
@@ -30,34 +28,50 @@
       transform: translateY(-50%);
       opacity: 0;
       transition: 3s;
+      z-index: 10;
     }
 
     h1 {
-      font-size: 42px;
+      font-size: 70px;
       color: #ff4da6;
-      text-shadow: 0 0 25px #ff4da6, 0 0 50px #ff4da6;
-      min-height: 50px;
+      text-shadow: 0 0 30px #ff4da6, 0 0 80px #ff4da6;
+      min-height: 80px;
     }
 
     p {
-      font-size: 22px;
-      text-shadow: 0 0 10px #ff4da6;
+      font-size: 32px;
+      text-shadow: 0 0 15px #ff4da6;
     }
 
     button {
-      padding: 12px 25px;
-      margin: 15px;
+      padding: 15px 30px;
+      margin: 20px;
       border: none;
       background: #ff4da6;
       color: white;
-      font-size: 18px;
-      border-radius: 12px;
+      font-size: 20px;
+      border-radius: 15px;
       cursor: pointer;
-      box-shadow: 0 0 15px #ff4da6;
+      box-shadow: 0 0 20px #ff4da6;
     }
 
     button:hover {
       transform: scale(1.1);
+    }
+
+    #foto {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 60px #ff4da6;
+      opacity: 0;
+      transition: 1.5s;
+      z-index: 9;
     }
   </style>
 </head>
@@ -65,6 +79,8 @@
 <body>
 
 <canvas id="canvas"></canvas>
+
+<img id="foto" src="foto.jpg">
 
 <div class="texto" id="texto">
   <h1 id="nombre"></h1>
@@ -76,7 +92,6 @@
   </div>
 </div>
 
-<!-- Música romántica libre -->
 <audio autoplay loop>
   <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6f6c9c8d3b.mp3">
 </audio>
@@ -89,6 +104,8 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let t = 0;
+let scale = 1;
+let growing = true;
 
 function heart(t) {
   return {
@@ -104,13 +121,14 @@ function draw() {
 
   for (let i = 0; i < t; i += 0.02) {
     let pos = heart(i);
-    ctx.lineTo(canvas.width/2 + pos.x * 15, canvas.height/2 + pos.y * 15);
+    let size = 45 * scale;
+    ctx.lineTo(canvas.width/2 + pos.x * size, canvas.height/2 + pos.y * size);
   }
 
   ctx.strokeStyle = "#ff4da6";
   ctx.shadowColor = "#ff4da6";
-  ctx.shadowBlur = 30;
-  ctx.lineWidth = 3;
+  ctx.shadowBlur = 60;
+  ctx.lineWidth = 6;
   ctx.stroke();
 
   t += 0.04;
@@ -120,11 +138,18 @@ function draw() {
   } else {
     mostrarTexto();
   }
+
+  if (growing) {
+    scale += 0.005;
+    if (scale > 1.1) growing = false;
+  } else {
+    scale -= 0.005;
+    if (scale < 0.9) growing = true;
+  }
 }
 
 draw();
 
-// ✨ Texto letra por letra
 function escribirTexto(texto, elemento, velocidad = 120) {
   let i = 0;
   function escribir() {
@@ -142,19 +167,51 @@ function mostrarTexto() {
   escribirTexto("Para Irene 💖", document.getElementById("nombre"));
 }
 
-// 💓 Vibración + acción botón
 function aceptar() {
   if (navigator.vibrate) {
     navigator.vibrate([200, 100, 200]);
   }
-  alert("Sabía que dirías que sí 😍💖");
+
+  lanzarCorazones();
+
+  let foto = document.getElementById("foto");
+  foto.style.opacity = 1;
+  foto.style.transform = "translate(-50%, -50%) scale(1)";
 }
 
-// 😂 Botón que huye
 function escapar(btn) {
   btn.style.position = "absolute";
   btn.style.top = Math.random() * window.innerHeight + "px";
   btn.style.left = Math.random() * window.innerWidth + "px";
+}
+
+function lanzarCorazones() {
+  for (let i = 0; i < 40; i++) {
+    let heart = document.createElement("div");
+    heart.innerHTML = "💖";
+
+    heart.style.position = "absolute";
+    heart.style.left = "50%";
+    heart.style.top = "50%";
+    heart.style.fontSize = (20 + Math.random() * 30) + "px";
+    heart.style.pointerEvents = "none";
+    heart.style.zIndex = 20;
+
+    document.body.appendChild(heart);
+
+    let x = (Math.random() - 0.5) * 800;
+    let y = (Math.random() - 0.5) * 800;
+
+    heart.animate([
+      { transform: "translate(-50%, -50%)", opacity: 1 },
+      { transform: `translate(${x}px, ${y}px)`, opacity: 0 }
+    ], {
+      duration: 1500,
+      easing: "ease-out"
+    });
+
+    setTimeout(() => heart.remove(), 1500);
+  }
 }
 </script>
 
