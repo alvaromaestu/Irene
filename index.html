@@ -35,12 +35,18 @@
       font-size: 70px;
       color: #ff4da6;
       text-shadow: 0 0 30px #ff4da6, 0 0 80px #ff4da6;
-      min-height: 80px;
     }
 
+    /* 💖 TEXTO CORREGIDO AQUÍ */
     p {
-      font-size: 32px;
-      text-shadow: 0 0 15px #ff4da6;
+      font-size: 36px;
+      color: #ffffff;
+      text-shadow:
+        0 0 5px #000,
+        0 0 15px #000,
+        0 0 30px #ff4da6,
+        0 0 60px #ff4da6;
+      font-weight: bold;
     }
 
     button {
@@ -53,10 +59,6 @@
       border-radius: 15px;
       cursor: pointer;
       box-shadow: 0 0 20px #ff4da6;
-    }
-
-    button:hover {
-      transform: scale(1.1);
     }
 
     #foto {
@@ -104,6 +106,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let t = 0;
+let dibujado = false;
 let scale = 1;
 let growing = true;
 
@@ -121,7 +124,7 @@ function draw() {
 
   for (let i = 0; i < t; i += 0.02) {
     let pos = heart(i);
-    let size = 45 * scale;
+    let size = 45;
     ctx.lineTo(canvas.width/2 + pos.x * size, canvas.height/2 + pos.y * size);
   }
 
@@ -131,24 +134,38 @@ function draw() {
   ctx.lineWidth = 6;
   ctx.stroke();
 
-  t += 0.04;
-
   if (t < Math.PI * 2) {
-    requestAnimationFrame(draw);
+    t += 0.04;
   } else {
+    dibujado = true;
+  }
+
+  if (dibujado) {
+    ctx.beginPath();
+    for (let i = 0; i < Math.PI * 2; i += 0.02) {
+      let pos = heart(i);
+      let size = 45 * scale;
+      ctx.lineTo(canvas.width/2 + pos.x * size, canvas.height/2 + pos.y * size);
+    }
+    ctx.stroke();
+
+    if (growing) {
+      scale += 0.005;
+      if (scale > 1.1) growing = false;
+    } else {
+      scale -= 0.005;
+      if (scale < 0.9) growing = true;
+    }
+
     mostrarTexto();
   }
 
-  if (growing) {
-    scale += 0.005;
-    if (scale > 1.1) growing = false;
-  } else {
-    scale -= 0.005;
-    if (scale < 0.9) growing = true;
-  }
+  requestAnimationFrame(draw);
 }
 
 draw();
+
+let textoMostrado = false;
 
 function escribirTexto(texto, elemento, velocidad = 120) {
   let i = 0;
@@ -163,6 +180,9 @@ function escribirTexto(texto, elemento, velocidad = 120) {
 }
 
 function mostrarTexto() {
+  if (textoMostrado) return;
+  textoMostrado = true;
+
   document.getElementById("texto").style.opacity = 1;
   escribirTexto("Para Irene 💖", document.getElementById("nombre"));
 }
@@ -194,7 +214,6 @@ function lanzarCorazones() {
     heart.style.left = "50%";
     heart.style.top = "50%";
     heart.style.fontSize = (20 + Math.random() * 30) + "px";
-    heart.style.pointerEvents = "none";
     heart.style.zIndex = 20;
 
     document.body.appendChild(heart);
